@@ -36,26 +36,29 @@ class Settings(BaseSettings):
     # ОБЩИЕ НАСТРОЙКИ ПРИЛОЖЕНИЯ
     # -------------------------------------------------------------------------
     
-    APP_NAME: str = Field(default="llm-p", description="Название сервиса")
+    app_name: str = Field(default="llm-p", description="Название сервиса")
     """Имя приложения для отображения в документации и логах."""
     
-    ENV: str = Field(default="local", description="Окружение: local, dev, prod")
+    env: str = Field(default="local", description="Окружение: local, dev, prod")
     """Текущее окружение запуска. Влияет на уровень логирования и поведение."""
+
+    debug: bool = Field(default=True, description="Режим отладки")
+    """ПОЛЕ БЫЛО ДОБАВЛЕНО — теперь settings.debug существует"""
     
     # -------------------------------------------------------------------------
     # НАСТРОЙКИ БЕЗОПАСНОСТИ (JWT)
     # -------------------------------------------------------------------------
     
-    JWT_SECRET: str = Field(..., description="Секретный ключ для подписи JWT")
+    jwt_secret: str = Field(..., description="Секретный ключ для подписи JWT")
     """
     Обязательное поле (...). 
     Должен быть сложной строкой, храниться в .env, не коммититься в репозиторий.
     """
     
-    JWT_ALG: str = Field(default="HS256", description="Алгоритм шифрования токенов")
+    jwt_alg: str = Field(default="HS256", description="Алгоритм шифрования токенов")
     """Алгоритм для кодирования/декодирования JWT (HS256, RS256 и др.)."""
     
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(
+    access_token_expire_minutes: int = Field(
         default=60, 
         description="Время жизни access-токена в минутах"
     )
@@ -65,7 +68,7 @@ class Settings(BaseSettings):
     # НАСТРОЙКИ БАЗЫ ДАННЫХ
     # -------------------------------------------------------------------------
     
-    SQLITE_PATH: str = Field(default="./app.db", description="Путь к файлу SQLite")
+    sqlite_path: str = Field(default="./app.db", description="Путь к файлу SQLite")
     """
     Путь к файлу базы данных.
     Относительный путь считается от корня проекта (где запущен сервер).
@@ -75,19 +78,19 @@ class Settings(BaseSettings):
     # НАСТРОЙКИ OPENROUTER (LLM API)
     # -------------------------------------------------------------------------
     
-    OPENROUTER_API_KEY: str = Field(..., description="API-ключ для OpenRouter")
+    openrouter_api_key: str = Field(..., description="API-ключ для OpenRouter")
     """
     Обязательный приватный ключ для авторизации запросов к OpenRouter.
-    Получается на https://openrouter.ai/keys
+    Получается на https://openrouter.ai/keys  
     """
     
-    OPENROUTER_BASE_URL: str = Field(
+    openrouter_base_url: str = Field(
         default="https://openrouter.ai/api/v1",
         description="Базовый URL API OpenRouter"
     )
     """Эндпоинт API. Менять только для тестирования или использования прокси."""
     
-    OPENROUTER_MODEL: str = Field(
+    openrouter_model: str = Field(
         default="stepfun/step-3.5-flash:free",
         description="Модель LLM по умолчанию"
     )
@@ -96,13 +99,13 @@ class Settings(BaseSettings):
     Примеры: "openai/gpt-4o-mini", "anthropic/claude-3.5-sonnet"
     """
     
-    OPENROUTER_SITE_URL: str = Field(
+    openrouter_site_url: str = Field(
         default="https://example.com",
         description="URL сайта для статистики OpenRouter"
     )
     """Ссылка на ваш проект (отображается в аналитике OpenRouter)."""
     
-    OPENROUTER_APP_NAME: str = Field(
+    openrouter_app_name: str = Field(
         default="llm-fastapi-openrouter",
         description="Имя приложения в панели OpenRouter"
     )
@@ -118,11 +121,10 @@ class Settings(BaseSettings):
 # 
 # Пример использования:
 #   from app.core.config import settings
-#   print(settings.APP_NAME)  # "llm-p"
+#   print(settings.app_name)  # "llm-p"
 #
 # Благодаря singleton-паттерну:
 # - Настройки загружаются из .env только один раз при старте
 # - Все части приложения видят одинаковые значения
 # - Легко мокать в тестах (подменить settings на тестовые значения)
 settings = Settings()
-

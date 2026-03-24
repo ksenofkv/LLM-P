@@ -34,8 +34,8 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
     
     # Логирование старта (опционально)
-    print(f"✅ Database initialized: {settings.SQLITE_PATH}")
-    print(f"✅ App started in {settings.ENV} mode")
+    print(f"✅ Database initialized: {settings.sqlite_path}")
+    print(f"✅ App started in {settings.env} mode")
     
     yield  # Приложение работает здесь
     
@@ -58,7 +58,7 @@ def create_app() -> FastAPI:
     
     # 1. Создаём экземпляр приложения
     application = FastAPI(
-        title=settings.APP_NAME,
+        title=settings.app_name,
         description="FastAPI service with JWT auth, SQLite, and OpenRouter LLM proxy",
         version="0.1.0",
         lifespan=lifespan,  # Подключаем обработчик событий старта/остановки
@@ -90,8 +90,8 @@ def create_app() -> FastAPI:
         """
         return {
             "status": "ok",
-            "service": settings.APP_NAME,
-            "environment": settings.ENV,
+            "service": settings.app_name,
+            "environment": settings.env,
         }
     
     return application
