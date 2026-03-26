@@ -157,7 +157,7 @@ async def get_current_user_id(
         # Декодируем JWT-токен
         payload = jwt.decode(
             token,
-            settings.SECRET_KEY,
+            settings.jwt_secret,
             algorithms=[ALGORITHM]
         )
         
@@ -193,7 +193,7 @@ async def get_current_user_id_optional(
             
         payload = jwt.decode(
             token,
-            settings.SECRET_KEY,
+            settings.jwt_secret,
             algorithms=[ALGORITHM]
         )
         
