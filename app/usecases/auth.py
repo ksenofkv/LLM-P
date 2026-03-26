@@ -73,26 +73,10 @@ class AuthUsecase:
     async def login(self, email: str, password: str) -> TokenResponse:
         """
         Аутентифицировать пользователя и выдать JWT-токен.
-        
-        Бизнес-правила:
-            1. Пользователь должен существовать
-            2. Пароль должен совпадать с хешем в БД
-            3. Токен должен содержать user_id и expire
-        
-        Args:
-            email: Email адрес пользователя.
-            password: Пароль в открытом виде.
-            
-        Returns:
-            Токен доступа (access_token + token_type).
-            
-        Raises:
-            UnauthorizedError: Если email не найден или пароль неверный.
         """
         # 1. Ищем пользователя по email
         user = await self._user_repo.get_by_email(email)
         if user is None:
-            # Не уточняем, что именно неверно (безопасность)
             raise UnauthorizedError(
                 message="Неверный email или пароль",
                 details={"field": "credentials"},
@@ -113,9 +97,11 @@ class AuthUsecase:
                 details={"field": "is_active", "value": False},
             )
         
-        # 4. Генерируем JWT-токен (через security модуль)
+        # 4. Генерируем JWT-токен ✅ ИСПРАВЛЕННЫЙ ВЫЗОВ
         access_token = create_access_token(
-            data={"sub": str(user.id), "email": user.email, "role": user.role}
+            subject=user.id,    # ✅ Передаём ID как subject
+            role=user.role,     # ✅ Передаём роль
+            # expires_delta не указываем — возьмётся из конфига
         )
         
         return TokenResponse(
