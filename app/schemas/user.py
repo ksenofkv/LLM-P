@@ -1,83 +1,41 @@
 # app/schemas/user.py
-"""
-Pydantic-схемы для пользовательских данных.
-Только публичные поля — без паролей и чувствительной информации.
-"""
+"""Публичные схемы для пользовательских данных."""
 
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator
 
 
 class UserPublic(BaseModel):
-    """
-    Публичные данные пользователя для ответов API.
+    """Публичная схема пользователя для ответов API."""
     
-    Не содержит паролей, хешей и другой чувствительной информации.
-    Используется в эндпоинтах: GET /auth/me, POST /auth/register, и др.
-    """
-    id: int = Field(
-        ...,
-        description="Уникальный идентификатор пользователя",
-        examples=[1]
-    )
-    email: EmailStr = Field(
-        ...,
-        description="Email адрес пользователя",
-        examples=["user@example.com"]
-    )
-    role: str = Field(
-        "user",
-        description="Роль пользователя (user, admin, moderator)",
-        examples=["user"]
-    )
-    is_active: bool = Field(
-        True,
-        description="Статус аккаунта",
-        examples=[True]
-    )
-    created_at: str | None = Field(
-        None,
-        description="Дата создания аккаунта (ISO 8601)",
-        examples=["2024-01-01T12:00:00Z"]
-    )
-
-    model_config = ConfigDict(
-        from_attributes=True,  # Позволяет FastAPI конвертировать ORM-объекты в схему
-        json_schema_extra={
-            "example": {
-                "id": 1,
-                "email": "user@example.com",
-                "role": "user",
-                "is_active": True,
-                "created_at": "2024-01-01T12:00:00Z"
-            }
-        }
-    )
-
-
-class UserUpdate(BaseModel):
-    """
-    Схема для обновления данных пользователя.
+    id: int = Field(..., description="ID пользователя")
+    email: EmailStr = Field(..., description="Email пользователя")
+    role: str = Field(..., description="Роль пользователя")
     
-    Все поля опциональны — обновляются только переданные значения.
-    """
-    email: EmailStr | None = Field(
-        None,
-        max_length=255,
-        description="Новый email адрес",
-        examples=["newemail@example.com"]
-    )
-    full_name: str | None = Field(
-        None,
-        max_length=100,
-        description="Новое имя пользователя",
-        examples=["Иван Иванов"]
-    )
+    # 🔑 ОСТАВЛЯЕМ str — это то, что ожидает клиент в JSON
+    created_at: Optional[str] = Field(None, description="Дата создания (ISO 8601)")
 
-    model_config = ConfigDict(
-        json_schema_extra={
-            "example": {
-                "email": "newemail@example.com",
-                "full_name": "Иван Иванов"
-            }
-        }
-    )
+    # 🔑 ConfigDict для Pydantic v2
+    model_config = ConfigDict(from_attributes=True)
+
+    # 🔑 ВАЛИДАТОР: конвертирует datetime → str ДО проверки типа
+    @field_validator("created_at", mode="before")
+    @classmethod
+    def _convert_datetime(cls, value):
+        if value is None:
+            return None
+        if isinstance(value, datetime):
+            return value.isoformat()
+        return value  # Если уже строка — возвращаем как есть
+
+
+# Вспомогательный dataclass для внутренней логики (не для API)
+from dataclasses import dataclass
+
+@dataclass
+class UserData:
+    """Данные пользователя для внутренней работы."""
+    user_id: int
+    user_role: str
