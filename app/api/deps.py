@@ -84,8 +84,10 @@ def get_openrouter_service() -> OpenRouterService:
     Returns:
         OpenRouterService: Клиент для вызова OpenRouter API.
     """
-    return OpenRouterService(api_key=settings.openrouter_api_key)
-
+    return OpenRouterService(
+        api_key=settings.openrouter_api_key,
+        default_model=settings.openrouter_model,  # ✅ Модель из .env
+    )
 
 # ==================== USECASES ====================
 

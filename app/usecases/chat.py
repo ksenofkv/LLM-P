@@ -11,6 +11,8 @@ from app.repositories.chat_messages import ChatMessageRepository
 from app.schemas.chat import ChatRequest, ChatResponse, ChatMessageHistory
 from app.services.openrouter_client import OpenRouterService
 
+from app.core.config import settings
+
 
 class ChatUsecase:
     """
@@ -67,6 +69,9 @@ class ChatUsecase:
             ExternalServiceError: Если OpenRouter вернул ошибку.
             NotFoundError: Если пользователь не найден (опционально).
         """
+        # 🔹 Модель из .env — игнорируем любые попытки переопределения
+        target_model = settings.openrouter_model
+        
         # ==================== 1. Сохраняем запрос пользователя ====================
         await self._message_repo.create(
             user_id=user_id,
@@ -86,7 +91,7 @@ class ChatUsecase:
         llm_response = await self._openrouter_service.generate(
             messages=messages,
             temperature=request.temperature,
-            model=request.model,
+            #model=target_model,
         )
         
         # ==================== 4. Сохраняем ответ ассистента ====================

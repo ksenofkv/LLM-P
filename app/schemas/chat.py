@@ -40,12 +40,12 @@ class ChatRequest(BaseModel):
         description="Креативность модели (0 = детерминировано, 2 = максимально креативно)",
         examples=[0.7]
     )
-    model: str | None = Field(
-        None,
-        max_length=100,
-        description="Идентификатор модели (опционально, используется модель по умолчанию)",
-        examples=["gpt-4", "llama-3"]
-    )
+    #model: str | None = Field(
+        #None,
+        #max_length=100,
+        #description="Идентификатор модели (опционально, используется модель по умолчанию)",
+        #examples=["gpt-4", "llama-3"]
+    #)
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -54,7 +54,7 @@ class ChatRequest(BaseModel):
                 "system": "Ты полезный ассистент, отвечающий кратко и по делу",
                 "max_history": 10,
                 "temperature": 0.7,
-                "model": "gpt-4"
+                #"model": "gpt-4"
             }
         }
     )

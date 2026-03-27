@@ -69,35 +69,21 @@ class OpenRouterService:
         self,
         messages: List[dict[str, str]],
         temperature: float = 0.7,
-        model: Optional[str] = None,
-        max_tokens: Optional[int] = None,
+        # 🔹 НЕТ параметра model — модель берётся только из self._default_model
     ) -> LLMResponse:
         """
         Сгенерировать ответ через OpenRouter API.
-        
-        Args:
-            messages: Список сообщений в формате [{"role": "...", "content": "..."}].
-            temperature: Креативность модели (0.0–2.0).
-            model: Идентификатор модели (если None, используется модель по умолчанию).
-            max_tokens: Максимальное количество токенов в ответе (опционально).
-            
-        Returns:
-            LLMResponse: Структурированный ответ от модели.
-            
-        Raises:
-            ExternalServiceError: Если API вернул ошибку или запрос не удался.
+        Модель берётся из self._default_model (настройки .env).
         """
-        target_model = model or self._default_model
+        # ✅ Модель ТОЛЬКО из настроек
+        target_model = self._default_model
         
         payload = {
-            "model": target_model,
+            "model": target_model,  # ← Используем модель из настроек
             "messages": messages,
             "temperature": temperature,
             "stream": False,
         }
-        
-        if max_tokens is not None:
-            payload["max_tokens"] = max_tokens
         
         headers = {
             "Authorization": f"Bearer {self._api_key}",
@@ -106,7 +92,6 @@ class OpenRouterService:
             "X-Title": self._app_name,
         }
         
-        # ✅ Создаём клиент внутри метода — правильное управление ресурсами
         async with httpx.AsyncClient(timeout=self._timeout) as client:
             try:
                 response = await client.post(
@@ -117,7 +102,7 @@ class OpenRouterService:
                 
                 if response.status_code >= 400:
                     raise httpx.HTTPStatusError(
-                        f"OpenRouter error {response.status_code}: {response.text}",
+                        f"OpenRouter error {response.status_code}",
                         request=response.request,
                         response=response,
                     )
@@ -140,25 +125,17 @@ class OpenRouterService:
                 raise ExternalServiceError(
                     message=f"OpenRouter вернул ошибку: {e.response.status_code}",
                     service_name="OpenRouter",
-                    details={
-                        "status_code": e.response.status_code,
-                        "response_body": e.response.text[:500],
-                        "model": target_model,
-                    },
+                    details={"status_code": e.response.status_code},
                 )
-                
             except httpx.RequestError as e:
                 raise ExternalServiceError(
                     message=f"Не удалось подключиться к OpenRouter: {str(e)}",
                     service_name="OpenRouter",
-                    details={"error_type": type(e).__name__},
                 )
-                
             except (KeyError, IndexError, ValueError) as e:
                 raise ExternalServiceError(
                     message=f"Некорректный ответ от OpenRouter: {str(e)}",
                     service_name="OpenRouter",
-                    details={"error_type": type(e).__name__},
                 )
 
     async def get_models(self) -> List[dict]:
