@@ -113,7 +113,7 @@ http://127.0.0.1:8000/docs
 ![Получение информации о пользователе 1](docs/7_profile/image-11.png)
 
 8. **Health check**
-![Состояние 1](docs/8_health_chek/image-12.png)
+![Состояние 1](docs/8_health_check/image-12.png)
 
 ---
 
