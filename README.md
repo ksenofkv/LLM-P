@@ -102,18 +102,18 @@ http://127.0.0.1:8000/docs
 ![Запрос в чат 3](docs/4_chat/image-6.png)
 
 5. **Получение истории через GET /chat/history**
-![История чата 1](docs/5_6_history/image-7.png)
-![История чата 2](docs/5_6_history/image-8.png)
+![История чата 1](docs/5_history/image-7.png)
+![История чата 2](docs/5_history/image-8.png)
 
 6. **Удаление истории через DELETE /chat/history**
-![Удаление истории 1](docs/5_6_history/image-7.png)
-![Удаление истории проверка истории](docs/5_6_history/image-8.png)
+![Удаление истории 1](docs/6_delete/image-9.png)
+![Удаление истории проверка истории](docs/6_delete/image-10.png)
 
 7. **Получение информации о текущем пользователе**
-![Получение информации о пользователе 1](docs/7_profile/image--.png)
+![Получение информации о пользователе 1](docs/7_profile/image-11.png)
 
 8. **Health check**
-![Состояние 1](docs/8_healt_chek/image-10.png)
+![Состояние 1](docs/8_health_chek/image-12.png)
 
 ---
 
