@@ -20,7 +20,7 @@
 Перед запуском убедитесь, что в корневой директории проекта (рядом с файлом pyproject.toml) создан файл конфигурации 
 *.env* с необходимыми параметрами конфигурации.
 
-## 🚀 Установка
+## Установка
 
 Для запуска проекта вам понадобится **Python 3.12+** и установленный менеджер пакетов [**uv**].
 
@@ -75,13 +75,22 @@ INFO:     Application startup complete.
 
 После запуска сервера перейдите в браузере по хосту `http://localhost:8000/docs`:
 
+
+Проверка ruff:
+```shell
+123@DESKTOP-D4408P2 MINGW64 ~/Desktop/python/LLM/llm-p (main)
+$ ruff check .
+All checks passed!
+
+123@DESKTOP-D4408P2 MINGW64 ~/Desktop/python/LLM/llm-p (main)
+$ ruff format --check .
+27 files already formatted
+```
+
 ![opeapi.png](docs/img/opeapi.png)
 
 ---
 ## Скриншоты работы проекта для проверки
-
-<details>
-<summary>📸 Нажмите, чтобы развернуть скриншоты</summary>
 
 1. **Регистрация пользователя**
 ![Регистрация](docs/1_registration/image.png)
@@ -109,8 +118,6 @@ INFO:     Application startup complete.
 
 8. **Health check**
 ![Состояние 1](docs/8_healt_chek/image-10.png)
-
-</details>
 
 ---
 

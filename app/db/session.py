@@ -21,7 +21,7 @@ engine = create_async_engine(
     settings.sqlite_path,
     echo=settings.debug,  # Логировать SQL-запросы в режиме отладки
     future=True,
-    pool_pre_ping=True,   # Проверять соединение перед использованием
+    pool_pre_ping=True,  # Проверять соединение перед использованием
 )
 
 
@@ -42,13 +42,14 @@ async_session_maker = async_sessionmaker(
 # Dependency для FastAPI
 # -----------------------------------------------------------------------------
 
+
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     """
     Генератор асинхронных сессий для Dependency Injection.
-    
+
     Yields:
         AsyncSession: Сессия для работы с БД.
-        
+
     Note:
         - Сессия автоматически закрывается после завершения запроса
         - При ошибке происходит rollback
@@ -69,10 +70,11 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 # Утилиты для работы с БД
 # -----------------------------------------------------------------------------
 
+
 async def create_db_tables() -> None:
     """
     Создать все таблицы в БД на основе моделей (для разработки).
-    
+
     Note:
         В продакшене используйте Alembic для миграций.
         Эта функция удобна для быстрого старта и тестирования.
@@ -84,7 +86,7 @@ async def create_db_tables() -> None:
 async def drop_db_tables() -> None:
     """
     Удалить все таблицы в БД (для тестов / сброса).
-    
+
     Внимание: Все данные будут безвозвратно удалены!
     """
     async with engine.begin() as conn:

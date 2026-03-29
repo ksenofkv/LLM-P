@@ -12,7 +12,6 @@ from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.errors import UnauthorizedError
 from app.core.security import ALGORITHM
 from app.db.session import get_async_session
 from app.repositories.users import UserRepository
@@ -29,6 +28,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # ==================== DATABASE SESSION ====================
 
+
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """
     Предоставляет асинхронную сессию базы данных.
@@ -43,6 +43,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
 # ==================== REPOSITORIES ====================
 
+
 def get_user_repo(session: AsyncSession = Depends(get_session)) -> UserRepository:
     """
     Создаёт и возвращает UserRepository.
@@ -55,7 +56,7 @@ def get_user_repo(session: AsyncSession = Depends(get_session)) -> UserRepositor
 
 
 def get_chat_message_repo(
-    session: AsyncSession = Depends(get_session)
+    session: AsyncSession = Depends(get_session),
 ) -> ChatMessageRepository:
     """
     Создаёт и возвращает ChatMessageRepository.
@@ -69,10 +70,11 @@ def get_chat_message_repo(
 
 # ==================== SERVICES ====================
 
+
 def get_openrouter_service() -> OpenRouterService:
     """
     Создаёт и возвращает OpenRouterService.
-    
+
     Returns:
         OpenRouterService: Клиент для вызова OpenRouter API.
     """
@@ -81,17 +83,17 @@ def get_openrouter_service() -> OpenRouterService:
         default_model=settings.openrouter_model,  # ✅ Модель из .env
     )
 
+
 # ==================== USECASES ====================
 
-def get_auth_usecase(
-    user_repo: UserRepository = Depends(get_user_repo)
-) -> AuthUsecase:
+
+def get_auth_usecase(user_repo: UserRepository = Depends(get_user_repo)) -> AuthUsecase:
     """
     Создаёт и возвращает AuthUsecase.
-    
+
     Args:
         user_repo: UserRepository из зависимости.
-        
+
     Returns:
         AuthUsecase: Use case для аутентификации.
     """
@@ -104,11 +106,11 @@ def get_chat_usecase(
 ) -> ChatUsecase:
     """
     Создаёт и возвращает ChatUsecase.
-    
+
     Args:
         message_repo: ChatMessageRepository из зависимости.
         openrouter_service: OpenRouterService из зависимости.
-        
+
     Returns:
         ChatUsecase: Use case для общения с LLM.
     """
@@ -120,21 +122,20 @@ def get_chat_usecase(
 
 # ==================== AUTHENTICATION ====================
 
-async def get_current_user_id(
-    token: str = Depends(oauth2_scheme)
-) -> int:
+
+async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> int:
     """
     Извлекает user_id из JWT-токена.
-    
+
     Используется как зависимость для защищённых эндпоинтов.
     Автоматически возвращает 401 если токен недействителен.
-    
+
     Args:
         token: JWT-токен из заголовка Authorization: Bearer <token>.
-        
+
     Returns:
         int: ID текущего пользователя.
-        
+
     Raises:
         HTTPException: 401 если токен недействителен или истёк.
     """
@@ -146,77 +147,70 @@ async def get_current_user_id(
         },
         headers={"WWW-Authenticate": "Bearer"},
     )
-    
+
     try:
         # Декодируем JWT-токен
-        payload = jwt.decode(
-            token,
-            settings.jwt_secret,
-            algorithms=[ALGORITHM]
-        )
-        
+        payload = jwt.decode(token, settings.jwt_secret, algorithms=[ALGORITHM])
+
         # Извлекаем user_id из claims
         user_id: Optional[str] = payload.get("sub")
         if user_id is None:
             raise credentials_exception
-        
+
         return int(user_id)
-        
+
     except JWTError:
         raise credentials_exception
 
 
 async def get_current_user_id_optional(
-    token: Optional[str] = Depends(oauth2_scheme)
+    token: Optional[str] = Depends(oauth2_scheme),
 ) -> Optional[int]:
     """
     Извлекает user_id из JWT-токена (опционально).
-    
+
     Используется для эндпоинтов, где аутентификация не обязательна.
     Возвращает None если токен не предоставлен или недействителен.
-    
+
     Args:
         token: JWT-токен из заголовка Authorization (опционально).
-        
+
     Returns:
         Optional[int]: ID пользователя или None.
     """
     try:
         if token is None:
             return None
-            
-        payload = jwt.decode(
-            token,
-            settings.jwt_secret,
-            algorithms=[ALGORITHM]
-        )
-        
+
+        payload = jwt.decode(token, settings.jwt_secret, algorithms=[ALGORITHM])
+
         user_id: Optional[str] = payload.get("sub")
         if user_id is None:
             return None
-        
+
         return int(user_id)
-        
+
     except JWTError:
         return None
 
 
 # ==================== COMBINED DEPENDENCIES ====================
 
+
 async def get_auth_dependencies(
     session: AsyncSession = Depends(get_session),
 ) -> dict:
     """
     Предоставляет все зависимости для auth-эндпоинтов.
-    
+
     Удобно для тестирования или когда нужно несколько зависимостей сразу.
-    
+
     Returns:
         dict: Словарь с готовыми объектами (repo, usecase).
     """
     user_repo = UserRepository(session=session)
     auth_usecase = AuthUsecase(user_repo=user_repo)
-    
+
     return {
         "session": session,
         "user_repo": user_repo,
@@ -230,7 +224,7 @@ async def get_chat_dependencies(
 ) -> dict:
     """
     Предоставляет все зависимости для chat-эндпоинтов.
-    
+
     Returns:
         dict: Словарь с готовыми объектами (repo, usecase, service).
     """
@@ -239,7 +233,7 @@ async def get_chat_dependencies(
         message_repo=message_repo,
         openrouter_service=openrouter_service,
     )
-    
+
     return {
         "session": session,
         "message_repo": message_repo,

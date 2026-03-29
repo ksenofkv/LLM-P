@@ -24,6 +24,7 @@ from app.db.base import Base
 
 class User(Base):
     """Модель пользователя."""
+
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -71,6 +72,7 @@ class User(Base):
 
 class ChatMessage(Base):
     """Модель сообщения чата."""
+
     __tablename__ = "chat_messages"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -103,9 +105,9 @@ class ChatMessage(Base):
         lazy="joined",
     )
 
-    __table_args__ = (
-        Index("ix_chat_messages_user_created", "user_id", "created_at"),
-    )
+    __table_args__ = (Index("ix_chat_messages_user_created", "user_id", "created_at"),)
 
     def __repr__(self) -> str:
-        return f"<ChatMessage(id={self.id}, user_id={self.user_id}, role='{self.role}')>"
+        return (
+            f"<ChatMessage(id={self.id}, user_id={self.user_id}, role='{self.role}')>"
+        )

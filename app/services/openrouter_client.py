@@ -8,7 +8,6 @@ from typing import Optional, List
 from pydantic import BaseModel, Field
 import httpx
 
-from app.core.config import settings
 from app.core.errors import ExternalServiceError  # ← Импорт из core.errors
 
 
@@ -16,26 +15,35 @@ from app.core.errors import ExternalServiceError  # ← Импорт из core.e
 # Модели данных для ответов LLM
 # -----------------------------------------------------------------------------
 
+
 class LLMResponse(BaseModel):
     """
     Структурированный ответ от LLM-сервиса.
     Используется для передачи данных из сервиса в usecase.
     """
+
     answer: str = Field(..., description="Текст ответа от модели")
     model: str = Field(..., description="Идентификатор использованной модели")
-    tokens_used: Optional[int] = Field(None, description="Количество использованных токенов")
-    finish_reason: Optional[str] = Field(None, description="Причина завершения генерации")
-    conversation_id: Optional[str] = Field(None, description="ID диалога для продолжения")
+    tokens_used: Optional[int] = Field(
+        None, description="Количество использованных токенов"
+    )
+    finish_reason: Optional[str] = Field(
+        None, description="Причина завершения генерации"
+    )
+    conversation_id: Optional[str] = Field(
+        None, description="ID диалога для продолжения"
+    )
 
 
 # -----------------------------------------------------------------------------
 # OpenRouter Service (имя класса должно совпадать с импортом в deps.py)
 # -----------------------------------------------------------------------------
 
+
 class OpenRouterService:
     """
     Сервис для вызова OpenRouter API.
-    
+
     Отвечает только за HTTP-взаимодействие с внешним сервисом.
     Не содержит бизнес-логики, не работает с БД напрямую.
     """
@@ -50,7 +58,7 @@ class OpenRouterService:
     ):
         """
         Инициализация сервиса.
-        
+
         Args:
             api_key: API-ключ для авторизации запросов.
             base_url: Базовый URL API OpenRouter.
@@ -77,21 +85,21 @@ class OpenRouterService:
         """
         # ✅ Модель ТОЛЬКО из настроек
         target_model = self._default_model
-        
+
         payload = {
             "model": target_model,  # ← Используем модель из настроек
             "messages": messages,
             "temperature": temperature,
             "stream": False,
         }
-        
+
         headers = {
             "Authorization": f"Bearer {self._api_key}",
             "Content-Type": "application/json",
             "HTTP-Referer": self._site_url,
             "X-Title": self._app_name,
         }
-        
+
         async with httpx.AsyncClient(timeout=self._timeout) as client:
             try:
                 response = await client.post(
@@ -99,28 +107,28 @@ class OpenRouterService:
                     headers=headers,
                     json=payload,
                 )
-                
+
                 if response.status_code >= 400:
                     raise httpx.HTTPStatusError(
                         f"OpenRouter error {response.status_code}",
                         request=response.request,
                         response=response,
                     )
-                
+
                 response.raise_for_status()
                 data = response.json()
-                
+
                 choice = data["choices"][0]
                 message = choice["message"]
                 usage = data.get("usage", {})
-                
+
                 return LLMResponse(
                     answer=message["content"],
                     model=data.get("model", target_model),
                     tokens_used=usage.get("total_tokens"),
                     finish_reason=choice.get("finish_reason"),
                 )
-                
+
             except httpx.HTTPStatusError as e:
                 raise ExternalServiceError(
                     message=f"OpenRouter вернул ошибку: {e.response.status_code}",
@@ -141,7 +149,7 @@ class OpenRouterService:
     async def get_models(self) -> List[dict]:
         """
         Получить список доступных моделей от OpenRouter.
-        
+
         Returns:
             Список словарей с информацией о моделях.
         """

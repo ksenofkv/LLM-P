@@ -17,6 +17,7 @@ from app.api import routes_auth, routes_chat
 # СОБЫТИЯ ЖИЗНЕННОГО ЦИКЛА ПРИЛОЖЕНИЯ
 # =============================================================================
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -28,13 +29,13 @@ async def lifespan(app: FastAPI):
         # Создаём все таблицы БД, если их нет
         # Base.metadata содержит информацию о всех ORM-моделях
         await conn.run_sync(Base.metadata.create_all)
-    
+
     # Логирование старта (опционально)
     print(f"Database initialized: {settings.sqlite_path}")
     print(f"App started in {settings.env} mode")
-    
+
     yield  # Приложение работает здесь
-    
+
     # --- ОСТАНОВКА ПРИЛОЖЕНИЯ ---
     # Здесь можно закрыть соединения, очистить кэш и т.д.
     await engine.dispose()
@@ -44,6 +45,7 @@ async def lifespan(app: FastAPI):
 # =============================================================================
 # ФУНКЦИЯ СОЗДАНИЯ ПРИЛОЖЕНИЯ
 # =============================================================================
+
 
 def create_app() -> FastAPI:
     """
@@ -57,7 +59,7 @@ def create_app() -> FastAPI:
         version="0.1.0",
         lifespan=lifespan,  # Подключаем обработчик событий старта/остановки
     )
-    
+
     # 2. Настраиваем CORS (Cross-Origin Resource Sharing)
     # Разрешает запросы с других доменов (например, с фронтенда)
     application.add_middleware(
@@ -67,12 +69,12 @@ def create_app() -> FastAPI:
         allow_methods=["*"],  # Разрешаем все HTTP-методы (GET, POST, PUT, DELETE...)
         allow_headers=["*"],  # Разрешаем все заголовки
     )
-    
+
     # 3. Подключаем роутеры (API-эндпоинты)
     # Все маршруты из этих модулей станут доступны в приложении
     application.include_router(routes_auth.router)  # /auth/*
     application.include_router(routes_chat.router)  # /chat/*
-    
+
     # 4. Добавляем технический эндпоинт для проверки здоровья
     @application.get("/health", tags=["health"])
     def health_check():
@@ -86,8 +88,9 @@ def create_app() -> FastAPI:
             "service": settings.app_name,
             "environment": settings.env,
         }
-    
+
     return application
+
 
 # =============================================================================
 # ТОЧКА ВХОДА ДЛЯ UVICORN
