@@ -39,11 +39,6 @@ cd llm-p
 pip install uv
 ```
 
-Инициализация проекта
-```bash
-uv init 
-```
-
 Создание виртуального окружения
 ```bash
 uv venv
@@ -82,8 +77,8 @@ INFO:     Application startup complete.
 
 ```
 
-После запуска сервера перейдите в браузере по хосту `http://localhost:8000/docs`:
-
+После запуска сервера перейдите в браузере по хосту:
+http://127.0.0.1:8000/docs
 
 ![opeapi.png](docs/img/opeapi.png)
 
