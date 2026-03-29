@@ -55,8 +55,9 @@ MacOS/Linux:
 source .venv/bin/activate
 ```
 
+Windows: 
 ```bash
-Windows: .venv\Scripts\activate.batWindows
+.venv\Scripts\activate.batWindows
 ```
 
 Установка зависимостей проекта
@@ -94,17 +95,6 @@ INFO:     Application startup complete.
 
 После запуска сервера перейдите в браузере по хосту `http://localhost:8000/docs`:
 
-
-Проверка ruff:
-```shell
-123@DESKTOP-D4408P2 MINGW64 ~/Desktop/python/LLM/llm-p (main)
-$ ruff check .
-All checks passed!
-
-123@DESKTOP-D4408P2 MINGW64 ~/Desktop/python/LLM/llm-p (main)
-$ ruff format --check .
-27 files already formatted
-```
 
 ![opeapi.png](docs/img/opeapi.png)
 
@@ -190,6 +180,17 @@ llm_p/
 │       └── routes_chat.py         # /chat/*
 │
 └── app.db                         # SQLite база (создаётся при запуске)
+```
+
+Проверка ruff:
+```shell
+123@DESKTOP-D4408P2 MINGW64 ~/Desktop/python/LLM/llm-p (main)
+$ ruff check .
+All checks passed!
+
+123@DESKTOP-D4408P2 MINGW64 ~/Desktop/python/LLM/llm-p (main)
+$ ruff format --check .
+27 files already formatted
 ```
 
 ---
