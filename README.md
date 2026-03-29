@@ -49,20 +49,9 @@ uv init
 uv venv
 ```
 
-Активировация виртуального окружения
-MacOS/Linux: 
-```bash
-source .venv/bin/activate
-```
-
-Windows: 
-```bash
-.venv\Scripts\activate.batWindows
-```
-
 Установка зависимостей проекта
 ```bash
-uv pip install -r <(uv pip compile pyproject.toml)
+uv sync
 ```
 
 Зарегистрируйтесь на платформе OpenRouter и получите API-ключ. Вставьте его в файл .env в корне проекта в строку OPENROUTER_API_KEY="Ваш API-ключ"
