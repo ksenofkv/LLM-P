@@ -10,7 +10,6 @@ from pydantic import BaseModel, Field, ConfigDict
 class ChatRequest(BaseModel):
     """
     Запрос к чату с LLM.
-    
     Используется в эндпоинте POST /chat/completions
     """
     prompt: str = Field(
@@ -63,8 +62,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     """
     Ответ от чата с LLM.
-    
-    Используется в эндпоинте POST /chat/completions
+        Используется в эндпоинте POST /chat/completions
     """
     answer: str = Field(
         ...,
@@ -96,7 +94,7 @@ class ChatResponse(BaseModel):
         json_schema_extra={
             "example": {
                 "answer": "Квантовая запутанность — это явление, при котором две частицы становятся взаимосвязанными...",
-                "model": "gpt-4",
+                #"model": "gpt-4",
                 "tokens_used": 150,
                 "finish_reason": "stop",
                 "conversation_id": "conv_12345"
@@ -108,7 +106,6 @@ class ChatResponse(BaseModel):
 class ChatMessageHistory(BaseModel):
     """
     Схема отдельного сообщения в истории чата.
-    
     Используется внутри usecase для формирования контекста.
     """
     role: str = Field(

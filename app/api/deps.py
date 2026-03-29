@@ -23,21 +23,17 @@ from app.usecases.chat import ChatUsecase
 
 
 # ==================== OAuth2 SCHEME ====================
-
 # URL для кнопки "Authorize" в Swagger UI
 # Должен совпадать с эндпоинтом логина
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-
 
 # ==================== DATABASE SESSION ====================
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """
     Предоставляет асинхронную сессию базы данных.
-    
     Используется как зависимость для репозиториев.
     Сессия автоматически закрывается после запроса.
-    
     Yields:
         AsyncSession: Сессия SQLAlchemy для работы с БД.
     """
@@ -50,10 +46,8 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 def get_user_repo(session: AsyncSession = Depends(get_session)) -> UserRepository:
     """
     Создаёт и возвращает UserRepository.
-    
     Args:
         session: Сессия БД из зависимости get_session.
-        
     Returns:
         UserRepository: Репозиторий для работы с пользователями.
     """
@@ -65,10 +59,8 @@ def get_chat_message_repo(
 ) -> ChatMessageRepository:
     """
     Создаёт и возвращает ChatMessageRepository.
-    
     Args:
         session: Сессия БД из зависимости get_session.
-        
     Returns:
         ChatMessageRepository: Репозиторий для работы с сообщениями.
     """

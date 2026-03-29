@@ -10,7 +10,6 @@ from pydantic import BaseModel, EmailStr, Field, ConfigDict
 class RegisterRequest(BaseModel):
     """
     Запрос на регистрацию нового пользователя.
-    
     Используется в эндпоинте POST /auth/register
     """
     email: EmailStr = Field(
@@ -36,9 +35,9 @@ class RegisterRequest(BaseModel):
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "email": "user@example.com",
+                "email": "student_ksenofontov@example.com",
                 "password": "secure_password_123",
-                "full_name": "Иван Иванов"
+                "full_name": "Константин Ксенофонтов"
             }
         }
     )
@@ -47,7 +46,6 @@ class RegisterRequest(BaseModel):
 class TokenResponse(BaseModel):
     """
     Ответ с токеном доступа после успешной аутентификации.
-    
     Используется в эндпоинте POST /auth/login
     Формат совместим с OAuth2 для корректной работы Swagger UI.
     """
@@ -81,7 +79,6 @@ class TokenResponse(BaseModel):
 class UserPublic(BaseModel):
     """
     Публичные данные пользователя (без чувствительной информации).
-    
     Используется в ответах API для возврата данных пользователя.
     """
     id: int = Field(..., description="Уникальный идентификатор пользователя")
@@ -95,8 +92,8 @@ class UserPublic(BaseModel):
         json_schema_extra={
             "example": {
                 "id": 1,
-                "email": "user@example.com",
-                "full_name": "Иван Иванов",
+                "email": "student_ksenofontov@example.com",
+                "full_name": "Константин Ксенофонтов",
                 "is_active": True,
                 "created_at": "2024-01-01T12:00:00Z"
             }

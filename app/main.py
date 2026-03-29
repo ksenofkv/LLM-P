@@ -8,12 +8,10 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from app.core.config import settings
 from app.db.base import Base
 from app.db.session import engine
 from app.api import routes_auth, routes_chat
-
 
 # =============================================================================
 # СОБЫТИЯ ЖИЗНЕННОГО ЦИКЛА ПРИЛОЖЕНИЯ
@@ -23,10 +21,8 @@ from app.api import routes_auth, routes_chat
 async def lifespan(app: FastAPI):
     """
     Управление жизненным циклом приложения (startup / shutdown).
-    
     Вызывается автоматически при старте и остановке сервера.
     """
-    
     # --- СТАРТ ПРИЛОЖЕНИЯ ---
     async with engine.begin() as conn:
         # Создаём все таблицы БД, если их нет
@@ -34,15 +30,15 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
     
     # Логирование старта (опционально)
-    print(f"✅ Database initialized: {settings.sqlite_path}")
-    print(f"✅ App started in {settings.env} mode")
+    print(f"Database initialized: {settings.sqlite_path}")
+    print(f"App started in {settings.env} mode")
     
     yield  # Приложение работает здесь
     
     # --- ОСТАНОВКА ПРИЛОЖЕНИЯ ---
     # Здесь можно закрыть соединения, очистить кэш и т.д.
     await engine.dispose()
-    print("✅ Database connections closed")
+    print("Database connections closed")
 
 
 # =============================================================================
@@ -52,10 +48,8 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     """
     Фабричная функция для создания и настройки FastAPI-приложения.
-    
     Возвращает полностью настроенный объект app со всеми middleware и роутерами.
     """
-    
     # 1. Создаём экземпляр приложения
     application = FastAPI(
         title=settings.app_name,
@@ -84,7 +78,6 @@ def create_app() -> FastAPI:
     def health_check():
         """
         Технический эндпоинт для мониторинга.
-        
         Возвращает статус приложения и текущее окружение.
         Используется для проверки, что сервер запущен и отвечает.
         """
@@ -95,7 +88,6 @@ def create_app() -> FastAPI:
         }
     
     return application
-
 
 # =============================================================================
 # ТОЧКА ВХОДА ДЛЯ UVICORN

@@ -85,7 +85,7 @@ async def drop_db_tables() -> None:
     """
     Удалить все таблицы в БД (для тестов / сброса).
     
-    ⚠️ Внимание: Все данные будут безвозвратно удалены!
+    Внимание: Все данные будут безвозвратно удалены!
     """
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)

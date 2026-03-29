@@ -3,7 +3,6 @@
 
 from datetime import datetime
 from typing import Optional
-
 from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator
 
 
@@ -14,13 +13,13 @@ class UserPublic(BaseModel):
     email: EmailStr = Field(..., description="Email пользователя")
     role: str = Field(..., description="Роль пользователя")
     
-    # 🔑 ОСТАВЛЯЕМ str — это то, что ожидает клиент в JSON
+    # ОСТАВЛЯЕМ str — это то, что ожидает клиент в JSON
     created_at: Optional[str] = Field(None, description="Дата создания (ISO 8601)")
 
-    # 🔑 ConfigDict для Pydantic v2
+    # ConfigDict для Pydantic v2
     model_config = ConfigDict(from_attributes=True)
 
-    # 🔑 ВАЛИДАТОР: конвертирует datetime → str ДО проверки типа
+    # ВАЛИДАТОР: конвертирует datetime → str ДО проверки типа
     @field_validator("created_at", mode="before")
     @classmethod
     def _convert_datetime(cls, value):

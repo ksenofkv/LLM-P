@@ -15,6 +15,6 @@ service = get_openrouter_service()
 print(f'🔹 Модель в сервисе: {service._default_model}')
 
 if settings.openrouter_model == service._default_model:
-    print('✅ Модель из .env корректно передаётся в сервис!')
+    print('Модель из .env корректно передаётся в сервис!')
 else:
-    print('❌ Несовпадение! Проверьте deps.py')
+    print('Несовпадение! Проверьте deps.py')

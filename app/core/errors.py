@@ -1,3 +1,4 @@
+# app/core/errors.py
 from typing import Any, Optional
 
 
