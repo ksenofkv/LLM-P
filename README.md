@@ -25,32 +25,51 @@
 Для запуска проекта вам понадобится **Python 3.12+** и установленный менеджер пакетов [**uv**].
 
 Перед установкой, убедитесь, что у вас установлен Python, склонируйте репозиторий с помощью команды:
+```bash
 git clone https://github.com/ksenofkv/LLM-P.git
+```
 
 Переход в папку проетка
+```bash
 cd llm-p
+```
 
 Установка uv
+```bash
 pip install uv
+```
 
 Инициализация проекта
+```bash
 uv init 
+```
 
 Создание виртуального окружения
+```bash
 uv venv
+```
 
 Активировация виртуального окружения
-MacOS/Linux: source .venv/bin/activate
+MacOS/Linux: 
+```bash
+source .venv/bin/activate
+```
+
+```bash
 Windows: .venv\Scripts\activate.batWindows
+```
 
 Установка зависимостей проекта
+```bash
 uv pip install -r <(uv pip compile pyproject.toml)
+```
 
 Зарегистрируйтесь на платформе OpenRouter и получите API-ключ. Вставьте его в файл .env в корне проекта в строку OPENROUTER_API_KEY="Ваш API-ключ"
 
 Запуск приложения
+```bash
 uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
+```
 
 При успешном запуске в терминале появятся логи, аналогичные следующим:
 
