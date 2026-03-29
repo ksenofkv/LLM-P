@@ -51,7 +51,7 @@ uv sync
 
 Зарегистрируйтесь на платформе OpenRouter и получите API-ключ. Вставьте его в файл .env в корне проекта в строку OPENROUTER_API_KEY="Ваш API-ключ"
 
-Запуск приложения
+Запуск приложения.
 ```bash
 uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
@@ -60,54 +60,57 @@ uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ```shell
 $ uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-INFO:     Will watch for changes in these directories: ['C:\\Users\\123\\Desktop\\python\\LLM\\llm-p']
+INFO:     Will watch for changes in these directories: ['C:\\Users\\123\\Desktop\\python\\test\\llm-p']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [16728] using WatchFiles
-INFO:     Started server process [28768]
+INFO:     Started reloader process [28696] using WatchFiles
+INFO:     Started server process [7188]
 INFO:     Waiting for application startup.
-2026-03-29 20:42:27,408 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-2026-03-29 20:42:27,408 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
-2026-03-29 20:42:27,408 INFO sqlalchemy.engine.Engine [raw sql] ()
-2026-03-29 20:42:27,410 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("chat_messages")
-2026-03-29 20:42:27,410 INFO sqlalchemy.engine.Engine [raw sql] ()
-2026-03-29 20:42:27,411 INFO sqlalchemy.engine.Engine COMMIT
+2026-03-29 23:43:34,121 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-03-29 23:43:34,121 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2026-03-29 23:43:34,121 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-03-29 23:43:34,122 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("chat_messages")
+2026-03-29 23:43:34,122 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-03-29 23:43:34,123 INFO sqlalchemy.engine.Engine COMMIT
 Database initialized: sqlite+aiosqlite:///./app.db
 App started in local mode
 INFO:     Application startup complete.
+
 
 ```
 
 После запуска сервера перейдите в браузере по хосту:
 http://127.0.0.1:8000/docs
 
-![opeapi.png](docs/img/opeapi.png)
+![opeapi.png](docs/img/image.png)
 
 ---
 ## Скриншоты работы проекта для проверки
 
 1. **Регистрация пользователя**
-![Регистрация](docs/1_registration/image.png)
+![Регистрация](docs/1_registration/image-1.png)
 
 2. **Логин и получение JWT**
-![Логин](docs/2_login/image-1.png)
+![Логин](docs/2_login/image-2.png)
 
 3. **Авторизация через Swagger**
-![Swagger Auth 1](docs/3_swagger/image-2.png)
-![Swagger Auth 2](docs/3_swagger/image-3.png)
+![Swagger Auth 1](docs/3_swagger/image-3.png)
+![Swagger Auth 2](docs/3_swagger/image-4.png)
 
 4. **Вызов POST /chat**
 ![Запрос в чат 1](docs/4_chat/image-4.png)
 ![Запрос в чат 2](docs/4_chat/image-5.png)
+![Запрос в чат 3](docs/4_chat/image-6.png)
 
 5. **Получение истории через GET /chat/history**
-![История чата](docs/5_6_history/image-6.png)
+![История чата 1](docs/5_6_history/image-7.png)
+![История чата 2](docs/5_6_history/image-8.png)
 
 6. **Удаление истории через DELETE /chat/history**
 ![Удаление истории 1](docs/5_6_history/image-7.png)
-![Удаление истории 2](docs/5_6_history/image-8.png)
+![Удаление истории проверка истории](docs/5_6_history/image-8.png)
 
 7. **Получение информации о текущем пользователе**
-![Получение информации о пользователе 1](docs/7_profile/image-9.png)
+![Получение информации о пользователе 1](docs/7_profile/image--.png)
 
 8. **Health check**
 ![Состояние 1](docs/8_healt_chek/image-10.png)

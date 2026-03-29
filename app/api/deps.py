@@ -1,6 +1,6 @@
 # app/api/deps.py
 """
-Dependency Injection для API слоя.
+Dependency Injection для API слоя..
 Предоставляет сессии БД, репозитории, usecase-объекты и аутентификацию.
 """
 
