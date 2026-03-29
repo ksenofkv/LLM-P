@@ -5,7 +5,6 @@
 """
 
 from typing import Optional
-
 from app.repositories.chat_messages import ChatMessageRepository
 from app.schemas.chat import ChatRequest, ChatResponse, ChatMessageHistory
 from app.services.openrouter_client import OpenRouterService
@@ -14,7 +13,6 @@ from app.services.openrouter_client import OpenRouterService
 class ChatUsecase:
     """
     Use case для общения с языковой моделью.
-
     Отвечает за бизнес-логику формирования контекста,
     сохранения истории и взаимодействия с OpenRouter.
     Не зависит от FastAPI, работает только с доменными ошибками.
@@ -32,7 +30,6 @@ class ChatUsecase:
     ) -> None:
         """
         Инициализация usecase.
-
         Args:
             message_repo: Репозиторий для работы с сообщениями.
             openrouter_service: Клиент для вызова OpenRouter API.
@@ -47,21 +44,17 @@ class ChatUsecase:
     ) -> ChatResponse:
         """
         Обработать запрос пользователя к LLM.
-
         Бизнес-правила:
             1. Сохранить запрос пользователя в историю
             2. Сформировать контекст для модели (system + history + prompt)
             3. Вызвать внешнюю LLM (OpenRouter)
             4. Сохранить ответ модели в историю
             5. Вернуть ответ клиенту
-
         Args:
             user_id: ID текущего пользователя.
             request: Данные запроса из API (prompt, system, max_history, temperature).
-
         Returns:
             Ответ от модели с текстом и метаданными.
-
         Raises:
             ExternalServiceError: Если OpenRouter вернул ошибку.
             NotFoundError: Если пользователь не найден (опционально).
@@ -117,18 +110,15 @@ class ChatUsecase:
     ) -> list[dict[str, str]]:
         """
         Сформировать список сообщений для отправки в LLM.
-
         Порядок сообщений:
             1. System (если есть) — инструкция для модели
             2. History — предыдущие сообщения пользователя (chronological order)
             3. Current prompt — текущий запрос
-
         Args:
             user_id: ID пользователя для загрузки истории.
             system_instruction: Системная инструкция (опционально).
             max_history: Сколько последних сообщений истории включить.
             current_prompt: Текущий запрос пользователя.
-
         Returns:
             Список сообщений в формате OpenRouter API.
         """
@@ -176,11 +166,9 @@ class ChatUsecase:
     ) -> list[ChatMessageHistory]:
         """
         Получить историю переписки пользователя.
-
         Args:
             user_id: ID пользователя.
             limit: Максимальное количество сообщений для возврата.
-
         Returns:
             Список сообщений истории.
         """
@@ -196,10 +184,8 @@ class ChatUsecase:
     async def clear_conversation_history(self, user_id: int) -> int:
         """
         Очистить всю историю переписки пользователя.
-
         Args:
             user_id: ID пользователя.
-
         Returns:
             Количество удалённых сообщений.
         """

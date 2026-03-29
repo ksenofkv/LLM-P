@@ -7,10 +7,8 @@
 
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Any, Union
-
 from passlib.context import CryptContext
 from jose import jwt, JWTError
-
 from app.core.config import settings
 
 # -----------------------------------------------------------------------------
@@ -31,7 +29,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Проверяет, соответствует ли открытый пароль хешированному.
-
     :param plain_password: Пароль в открытом виде (от пользователя).
     :param hashed_password: Хеш пароля из базы данных.
     :return: True если пароль верный, иначе False.
@@ -42,7 +39,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def hash_password(password: str) -> str:  # ✅ Переименовано из get_password_hash
     """
     Генерирует хеш для переданного пароля.
-
     :param password: Пароль в открытом виде.
     :return: Строка хеша (bcrypt).
     """
@@ -59,7 +55,6 @@ def create_access_token(
 ) -> str:
     """
     Создает JWT Access Token.
-
     :param subject: ID пользователя (будет преобразован в строку).
     :param role: Роль пользователя (например, 'user', 'admin').
     :param expires_delta: Дельта времени жизни токена. Если None, берется из конфига.
@@ -84,7 +79,6 @@ def create_access_token(
 def decode_access_token(token: str) -> Optional[dict[str, Any]]:
     """
     Декодирует и валидирует JWT Access Token.
-
     :param token: Строка JWT токена (из заголовка Authorization).
     :return: Payload (dict) если токен валиден, иначе None.
     """

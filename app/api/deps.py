@@ -5,12 +5,10 @@ Dependency Injection для API слоя.
 """
 
 from typing import AsyncGenerator, Optional
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.core.config import settings
 from app.core.security import ALGORITHM
 from app.db.session import get_async_session
@@ -19,7 +17,6 @@ from app.repositories.chat_messages import ChatMessageRepository
 from app.services.openrouter_client import OpenRouterService
 from app.usecases.auth import AuthUsecase
 from app.usecases.chat import ChatUsecase
-
 
 # ==================== OAuth2 SCHEME ====================
 # URL для кнопки "Authorize" в Swagger UI
@@ -126,16 +123,12 @@ def get_chat_usecase(
 async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> int:
     """
     Извлекает user_id из JWT-токена.
-
     Используется как зависимость для защищённых эндпоинтов.
     Автоматически возвращает 401 если токен недействителен.
-
     Args:
         token: JWT-токен из заголовка Authorization: Bearer <token>.
-
     Returns:
         int: ID текущего пользователя.
-
     Raises:
         HTTPException: 401 если токен недействителен или истёк.
     """
@@ -168,13 +161,10 @@ async def get_current_user_id_optional(
 ) -> Optional[int]:
     """
     Извлекает user_id из JWT-токена (опционально).
-
     Используется для эндпоинтов, где аутентификация не обязательна.
     Возвращает None если токен не предоставлен или недействителен.
-
     Args:
         token: JWT-токен из заголовка Authorization (опционально).
-
     Returns:
         Optional[int]: ID пользователя или None.
     """
@@ -202,9 +192,7 @@ async def get_auth_dependencies(
 ) -> dict:
     """
     Предоставляет все зависимости для auth-эндпоинтов.
-
     Удобно для тестирования или когда нужно несколько зависимостей сразу.
-
     Returns:
         dict: Словарь с готовыми объектами (repo, usecase).
     """
@@ -224,7 +212,6 @@ async def get_chat_dependencies(
 ) -> dict:
     """
     Предоставляет все зависимости для chat-эндпоинтов.
-
     Returns:
         dict: Словарь с готовыми объектами (repo, usecase, service).
     """

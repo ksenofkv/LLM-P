@@ -22,7 +22,6 @@ class AuthUsecase:
     def __init__(self, user_repo: UserRepository) -> None:
         """
         Инициализация usecase.
-
         Args:
             user_repo: Репозиторий для работы с пользователями.
         """
@@ -31,18 +30,14 @@ class AuthUsecase:
     async def register(self, request: RegisterRequest) -> UserPublic:
         """
         Зарегистрировать нового пользователя.
-
         Бизнес-правила:
             1. Email должен быть уникальным
             2. Пароль должен быть захеширован перед сохранением
             3. Роль по умолчанию — "user"
-
         Args:
             request: Данные для регистрации из API.
-
         Returns:
             Публичные данные созданного пользователя.
-
         Raises:
             ConflictError: Если email уже занят.
         """
@@ -109,17 +104,13 @@ class AuthUsecase:
     async def get_user_profile(self, user_id: int) -> UserPublic:
         """
         Получить профиль пользователя по ID.
-
         Бизнес-правила:
             1. Пользователь должен существовать
             2. Возвращаются только публичные данные (без пароля)
-
         Args:
             user_id: Уникальный идентификатор пользователя.
-
         Returns:
             Публичные данные пользователя.
-
         Raises:
             NotFoundError: Если пользователь не найден.
         """
@@ -135,13 +126,10 @@ class AuthUsecase:
     async def get_user_by_email(self, email: str) -> UserPublic:
         """
         Получить пользователя по email (вспомогательный метод).
-
         Args:
             email: Email адрес пользователя.
-
         Returns:
             Публичные данные пользователя.
-
         Raises:
             NotFoundError: Если пользователь не найден.
         """

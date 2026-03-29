@@ -5,17 +5,14 @@
 """
 
 from typing import Optional
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.db.models import User
 
 
 class UserRepository:
     """
     Репозиторий для CRUD-операций с пользователями.
-
     Отвечает только за доступ к данным в БД.
     Не содержит бизнес-логики, хеширования паролей или создания токенов.
     """
@@ -23,7 +20,6 @@ class UserRepository:
     def __init__(self, session: AsyncSession) -> None:
         """
         Инициализация репозитория.
-
         Args:
             session: Асинхронная сессия SQLAlchemy для работы с БД.
         """
@@ -32,10 +28,8 @@ class UserRepository:
     async def get_by_email(self, email: str) -> Optional[User]:
         """
         Получить пользователя по email.
-
         Args:
             email: Email адрес пользователя.
-
         Returns:
             Объект User если найден, иначе None.
         """
@@ -46,10 +40,8 @@ class UserRepository:
     async def get_by_id(self, user_id: int) -> Optional[User]:
         """
         Получить пользователя по ID.
-
         Args:
             user_id: Уникальный идентификатор пользователя.
-
         Returns:
             Объект User если найден, иначе None.
         """
@@ -66,16 +58,13 @@ class UserRepository:
     ) -> User:
         """
         Создать нового пользователя в базе данных.
-
         Args:
             email: Email адрес пользователя.
             password_hash: Хеш пароля (должен быть захеширован до вызова этого метода).
             role: Роль пользователя (по умолчанию "user").
             full_name: Имя пользователя (опционально).
-
         Returns:
             Созданный объект User с заполненным id и created_at.
-
         Note:
             Метод делает commit и refresh для получения актуальных данных.
         """
@@ -99,11 +88,9 @@ class UserRepository:
     async def update(self, user: User, **kwargs) -> User:
         """
         Обновить данные пользователя.
-
         Args:
             user: Объект пользователя для обновления.
             **kwargs: Поля для обновления (например, email, role, is_active).
-
         Returns:
             Обновлённый объект User.
         """
@@ -119,7 +106,6 @@ class UserRepository:
     async def delete(self, user: User) -> None:
         """
         Удалить пользователя из базы данных.
-
         Args:
             user: Объект пользователя для удаления.
         """
@@ -129,10 +115,8 @@ class UserRepository:
     async def exists_by_email(self, email: str) -> bool:
         """
         Проверить, существует ли пользователь с таким email.
-
         Args:
             email: Email адрес для проверки.
-
         Returns:
             True если пользователь существует, иначе False.
         """

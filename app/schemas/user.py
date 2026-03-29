@@ -4,9 +4,9 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator
-
-# Вспомогательный dataclass для внутренней логики (не для API)
-from dataclasses import dataclass
+from dataclasses import (
+    dataclass,
+)  # Вспомогательный dataclass для внутренней логики (не для API)
 
 
 class UserPublic(BaseModel):

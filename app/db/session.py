@@ -5,13 +5,10 @@
 """
 
 from typing import AsyncGenerator
-
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-
 from app.core.config import settings
 from app.db.base import Base  # noqa: F401 (импортируем для регистрации моделей)
 from app.db.models import User, ChatMessage  # noqa: F401 (импортируем модели для metadata)
-
 
 # -----------------------------------------------------------------------------
 # Создание асинхронного engine
@@ -24,7 +21,6 @@ engine = create_async_engine(
     pool_pre_ping=True,  # Проверять соединение перед использованием
 )
 
-
 # -----------------------------------------------------------------------------
 # Фабрика сессий
 # -----------------------------------------------------------------------------
@@ -36,7 +32,6 @@ async_session_maker = async_sessionmaker(
     autocommit=False,
     autoflush=False,
 )
-
 
 # -----------------------------------------------------------------------------
 # Dependency для FastAPI

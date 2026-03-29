@@ -5,17 +5,14 @@
 """
 
 from typing import List, Optional
-
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.db.models import ChatMessage
 
 
 class ChatMessageRepository:
     """
     Репозиторий для CRUD-операций с сообщениями чата.
-
     Отвечает только за доступ к данным в БД.
     Не содержит бизнес-логики, не обращается к OpenRouter,
     не решает какие сообщения включать в контекст.
@@ -24,7 +21,6 @@ class ChatMessageRepository:
     def __init__(self, session: AsyncSession) -> None:
         """
         Инициализация репозитория.
-
         Args:
             session: Асинхронная сессия SQLAlchemy для работы с БД.
         """
@@ -47,10 +43,8 @@ class ChatMessageRepository:
             content: Текст сообщения.
             model: Название модели LLM (для сообщений assistant, опционально).
             tokens_used: Количество использованных токенов (опционально).
-
         Returns:
             Созданный объект ChatMessage с заполненным id и created_at.
-
         Note:
             Метод делает commit и refresh для получения актуальных данных.
         """
@@ -75,14 +69,11 @@ class ChatMessageRepository:
     ) -> List[ChatMessage]:
         """
         Получить последние N сообщений пользователя.
-
         Args:
             user_id: ID пользователя, чьи сообщения нужно получить.
             limit: Максимальное количество сообщений для возврата.
-
         Returns:
             Список сообщений, отсортированных по дате создания (возрастание).
-
         Note:
             Сообщения возвращаются в хронологическом порядке (старые → новые).
             Сортировка выполняется по created_at ASC.
@@ -104,14 +95,11 @@ class ChatMessageRepository:
     ) -> List[ChatMessage]:
         """
         Получить последние N сообщений пользователя (в обратном порядке).
-
         Args:
             user_id: ID пользователя, чьи сообщения нужно получить.
             limit: Максимальное количество сообщений для возврата.
-
         Returns:
             Список сообщений, отсортированных по дате создания (убывание).
-
         Note:
             Сообщения возвращаются в обратном хронологическом порядке (новые → старые).
             Удобно для отображения в UI.
@@ -129,13 +117,11 @@ class ChatMessageRepository:
     async def delete_all_by_user(self, user_id: int) -> int:
         """
         Удалить всю историю сообщений пользователя.
-
         Args:
             user_id: ID пользователя, чьи сообщения нужно удалить.
 
         Returns:
             Количество удалённых сообщений.
-
         Note:
             Используется массовое удаление для производительности.
             Каскадное удаление через relationship также работает, но этот метод
@@ -150,10 +136,8 @@ class ChatMessageRepository:
     async def count_by_user(self, user_id: int) -> int:
         """
         Подсчитать количество сообщений пользователя.
-
         Args:
             user_id: ID пользователя.
-
         Returns:
             Количество сообщений в истории пользователя.
         """
@@ -168,11 +152,9 @@ class ChatMessageRepository:
     ) -> Optional[ChatMessage]:
         """
         Получить сообщение по ID.
-
         Args:
             message_id: ID сообщения.
             user_id: Опционально ID пользователя для проверки принадлежности.
-
         Returns:
             Объект ChatMessage если найден, иначе None.
         """

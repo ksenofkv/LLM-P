@@ -7,9 +7,7 @@
 from typing import Optional, List
 from pydantic import BaseModel, Field
 import httpx
-
 from app.core.errors import ExternalServiceError  # ← Импорт из core.errors
-
 
 # -----------------------------------------------------------------------------
 # Модели данных для ответов LLM
@@ -43,7 +41,6 @@ class LLMResponse(BaseModel):
 class OpenRouterService:
     """
     Сервис для вызова OpenRouter API.
-
     Отвечает только за HTTP-взаимодействие с внешним сервисом.
     Не содержит бизнес-логики, не работает с БД напрямую.
     """
@@ -58,7 +55,6 @@ class OpenRouterService:
     ):
         """
         Инициализация сервиса.
-
         Args:
             api_key: API-ключ для авторизации запросов.
             base_url: Базовый URL API OpenRouter.
